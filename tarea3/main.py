@@ -1,1 +1,2 @@
-print("hello wolrd")hgfhgfh
+print("hello wolrd")
+print("this is a test")
