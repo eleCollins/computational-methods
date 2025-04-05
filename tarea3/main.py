@@ -1,10 +1,12 @@
 from enteros import enteros
 from flotantes import flotantes
+from operadores import operadores
 from enum import Enum
 
 class Tokens(str, Enum):
   ENTERO = 'Entero'
   FLOTANTE = 'Flotante'
+  OPERADOR = 'Operador'
   OTRO = 'Otro'
 
 def lexerAritmetico(archivo):
@@ -14,14 +16,16 @@ def lexerAritmetico(archivo):
     current_token: string = ""
 
     for char in contenido:
-      if char.isalnum() or char in ".+-eE":  # Characters that can be part of a number
-                current_token += char
+      if char.isalnum() or char in ".+-eE=*/^":
+        current_token += char
       else:
         if current_token:
           if enteros.accepts(current_token):
             tokens.append({ current_token: Tokens.ENTERO })
           elif flotantes.accepts(current_token):
             tokens.append({ current_token: Tokens.FLOTANTE })
+          elif operadores.accepts(current_token):
+            tokens.append({current_token: Tokens.OPERADOR })
           current_token = ""
 
         if not char.isspace():
@@ -33,10 +37,14 @@ def lexerAritmetico(archivo):
           tokens.append({current_token: Tokens.ENTERO})
       elif flotantes.accepts(current_token):
           tokens.append({current_token: Tokens.FLOTANTE})
+      elif operadores.accepts(current_token):
+          tokens.append({current_token: Tokens.OPERADOR})
       else:
           tokens.append({current_token: Tokens.OTRO})
 
-
-    print(tokens)
+    print("TOKEN\t\tTIPO")
+    for token in tokens:
+      for key, value in token.items():
+        print(f"{key}\t\t{value.value}")
 
 lexerAritmetico('tarea3/prueba.txt')
