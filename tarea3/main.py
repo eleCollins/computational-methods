@@ -1,12 +1,14 @@
 from enteros import enteros
 from flotantes import flotantes
 from operadores import operadores
+from variables import variables
 from enum import Enum
 
 class Tokens(str, Enum):
   ENTERO = 'Entero'
   FLOTANTE = 'Flotante'
   OPERADOR = 'Operador'
+  VARIABLE = 'Variable'
   OTRO = 'Otro'
 
 def lexerAritmetico(archivo):
@@ -26,21 +28,19 @@ def lexerAritmetico(archivo):
             tokens.append({ current_token: Tokens.FLOTANTE })
           elif operadores.accepts(current_token):
             tokens.append({current_token: Tokens.OPERADOR })
+          elif variables.accepts(current_token):
+            tokens.append({current_token: Tokens.VARIABLE })
           current_token = ""
-
-        if not char.isspace():
-          tokens.append({ char: Tokens.OTRO })
-
 
     if current_token:
       if enteros.accepts(current_token):
-          tokens.append({current_token: Tokens.ENTERO})
+        tokens.append({current_token: Tokens.ENTERO})
       elif flotantes.accepts(current_token):
-          tokens.append({current_token: Tokens.FLOTANTE})
+        tokens.append({current_token: Tokens.FLOTANTE})
       elif operadores.accepts(current_token):
-          tokens.append({current_token: Tokens.OPERADOR})
-      else:
-          tokens.append({current_token: Tokens.OTRO})
+        tokens.append({current_token: Tokens.OPERADOR})
+      elif variables.accepts(current_token):
+        tokens.append({current_token: Tokens.VARIABLE })
 
     print("TOKEN\t\tTIPO")
     for token in tokens:
