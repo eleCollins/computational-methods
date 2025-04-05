@@ -1,15 +1,10 @@
 from automatas import NFA
 
 nfa_states = {0, 1}
-nfa_alphabet = { '=', '+', '-', '*', '/', '^' }
+nfa_alphabet = set('=+-*/^')
 nfa_transitions = {
   0: {
-    '=': [1],
-    '+': [1],
-    '-': [1],
-    '*': [1],
-    '/': [1],
-    '^': [1]
+    **{char: [1] for char in nfa_alphabet}
   }
 }
 nfa_initial_state = 0

@@ -7,7 +7,7 @@ nfa_transitions = {
         **{char: [1] for char in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"}
     },
     1: {
-        **{char: [1] for char in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"}
+        **{char: [1] for char in nfa_alphabet},
     }
 }
 nfa_start_state = 0
