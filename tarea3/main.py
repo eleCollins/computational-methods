@@ -1,4 +1,5 @@
 from enteros import enteros
+from flotantes import flotantes
 from enum import Enum
 
 class Tokens(str, Enum):
@@ -14,7 +15,7 @@ def lexerAritmetico(archivo):
     for string in strings:
       if (enteros.accepts(string)):
         tokens.append({ string: Tokens.ENTERO })
-      else if ():
+      elif (flotantes.accepts(string)):
         tokens.append({ string: Tokens.FLOTANTE })
 
     print(tokens)
