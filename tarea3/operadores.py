@@ -1,14 +1,20 @@
 from automatas import NFA
 
-nfa_states = {0, 1}
-nfa_alphabet = set('=+-*/^')
-nfa_transitions = {
-  0: {
-    **{char: [1] for char in nfa_alphabet}
-  }
-}
-nfa_initial_state = 0
-nfa_final_states = {1}
+# Define a function to create a DFA for a single operator
+def create_operator_dfa(operator):
+    dfa_states = {0, 1}
+    dfa_alphabet = {operator}
+    dfa_transitions = {
+        0: {
+          operator: [1]
+          },
+    }
+    dfa_initial_state = 0
+    dfa_final_states = {1}
+    return NFA(dfa_states, dfa_alphabet, dfa_transitions, dfa_initial_state, dfa_final_states).to_dfa()
 
-nfa = NFA(nfa_states, nfa_alphabet, nfa_transitions, nfa_initial_state, nfa_final_states)
-operadores = nfa.to_dfa()
+# List of operators
+operators = '=+-*/^'
+
+# Create a dictionary of DFAs, one for each operator
+operator_dfas = {op: create_operator_dfa(op) for op in operators}

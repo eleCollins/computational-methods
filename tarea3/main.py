@@ -1,18 +1,23 @@
 from enteros import enteros
 from flotantes import flotantes
-from operadores import operadores
+from operadores import operator_dfas  # Updated import
 from variables import variables
 from parentesis import parentesis_izq, parentesis_der
 from enum import Enum
 
 class Tokens(str, Enum):
-  ENTERO = 'Entero'
-  FLOTANTE = 'Flotante'
-  OPERADOR = 'Operador'
-  VARIABLE = 'Variable',
-  PARENTESIS_IZQ = 'Paréntesis que abre'
-  PARENTESIS_DER = 'Paréntesis que cierra'
-  OTRO = 'Otro'
+    ENTERO = 'Entero'
+    FLOTANTE = 'Flotante'
+    VARIABLE = 'Variable'
+    PARENTESIS_IZQ = 'Paréntesis que abre'
+    PARENTESIS_DER = 'Paréntesis que cierra'
+    IGUAL = 'Asignación'
+    MAS = 'Suma'
+    MENOS = 'Resta'
+    MULTIPLICACION = 'Multiplicación'
+    DIVISION = 'División'
+    POTENCIA = 'Potencia'
+    OTRO = 'Otro'
 
 def lexerAritmetico(archivo):
     with open(archivo, 'r') as f:
@@ -27,10 +32,20 @@ def lexerAritmetico(archivo):
                         tokens.append({current_token: Tokens.ENTERO})
                     elif flotantes.accepts(current_token):
                         tokens.append({current_token: Tokens.FLOTANTE})
-                    elif operadores.accepts(current_token):
-                        tokens.append({current_token: Tokens.OPERADOR})
                     elif variables.accepts(current_token):
                         tokens.append({current_token: Tokens.VARIABLE})
+                    elif operator_dfas['='].accepts(current_token):
+                        tokens.append({current_token: Tokens.IGUAL})
+                    elif operator_dfas['+'].accepts(current_token):
+                        tokens.append({current_token: Tokens.MAS})
+                    elif operator_dfas['-'].accepts(current_token):
+                        tokens.append({current_token: Tokens.MENOS})
+                    elif operator_dfas['*'].accepts(current_token):
+                        tokens.append({current_token: Tokens.MULTIPLICACION})
+                    elif operator_dfas['/'].accepts(current_token):
+                        tokens.append({current_token: Tokens.DIVISION})
+                    elif operator_dfas['^'].accepts(current_token):
+                        tokens.append({current_token: Tokens.POTENCIA})
                     current_token = ""
 
                 # Tokenize the parenthesis
@@ -46,11 +61,27 @@ def lexerAritmetico(archivo):
                         tokens.append({current_token: Tokens.ENTERO})
                     elif flotantes.accepts(current_token):
                         tokens.append({current_token: Tokens.FLOTANTE})
-                    elif operadores.accepts(current_token):
-                        tokens.append({current_token: Tokens.OPERADOR})
                     elif variables.accepts(current_token):
                         tokens.append({current_token: Tokens.VARIABLE})
+                    elif operator_dfas['='].accepts(current_token):
+                        tokens.append({current_token: Tokens.IGUAL})
+                    elif operator_dfas['+'].accepts(current_token):
+                        tokens.append({current_token: Tokens.MAS})
+                    elif operator_dfas['-'].accepts(current_token):
+                        tokens.append({current_token: Tokens.MENOS})
+                    elif operator_dfas['*'].accepts(current_token):
+                        tokens.append({current_token: Tokens.MULTIPLICACION})
+                    elif operator_dfas['/'].accepts(current_token):
+                        tokens.append({current_token: Tokens.DIVISION})
+                    elif operator_dfas['^'].accepts(current_token):
+                        tokens.append({current_token: Tokens.POTENCIA})
                     current_token = ""
+
+                # Check if the character matches any operator DFA
+                for operator, dfa in operator_dfas.items():
+                    if dfa.accepts(char):
+                        tokens.append({char: Tokens(operator)})
+                        break
 
         # Process any remaining token
         if current_token:
@@ -58,10 +89,20 @@ def lexerAritmetico(archivo):
                 tokens.append({current_token: Tokens.ENTERO})
             elif flotantes.accepts(current_token):
                 tokens.append({current_token: Tokens.FLOTANTE})
-            elif operadores.accepts(current_token):
-                tokens.append({current_token: Tokens.OPERADOR})
             elif variables.accepts(current_token):
                 tokens.append({current_token: Tokens.VARIABLE})
+            elif operator_dfas['='].accepts(current_token):
+                tokens.append({current_token: Tokens.IGUAL})
+            elif operator_dfas['+'].accepts(current_token):
+                tokens.append({current_token: Tokens.MAS})
+            elif operator_dfas['-'].accepts(current_token):
+                tokens.append({current_token: Tokens.MENOS})
+            elif operator_dfas['*'].accepts(current_token):
+                tokens.append({current_token: Tokens.MULTIPLICACION})
+            elif operator_dfas['/'].accepts(current_token):
+                tokens.append({current_token: Tokens.DIVISION})
+            elif operator_dfas['^'].accepts(current_token):
+                tokens.append({current_token: Tokens.POTENCIA})
 
         print("TOKEN\t\tTIPO")
         for token in tokens:
