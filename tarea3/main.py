@@ -101,4 +101,4 @@ def lexerAritmetico(archivo):
             for key, value in token.items():
                 print(f"{key}\t\t{value.value}")
 
-lexerAritmetico('tarea3/prueba.txt')
+lexerAritmetico('prueba.txt')
